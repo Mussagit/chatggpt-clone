@@ -7,7 +7,8 @@ import ChatInput from './components/ChatInput/ChatInput';
 import AuthModal from './components/AuthModal/AuthModal';
 import './App.css';
 
-const API_BASE = '/api';
+const rawApiBase = (import.meta.env.VITE_API_BASE_URL || '/api').trim().replace(/\/+$/, '');
+const API_BASE = rawApiBase.endsWith('/api') ? rawApiBase : `${rawApiBase}/api`;
 
 export default function App() {
   const [user, setUser] = useState(() => {
