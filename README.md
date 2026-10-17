@@ -116,3 +116,15 @@ ChatGpt/
 │
 └── package.json                # Root workspace configuration
 ```
+
+---
+
+## 🌐 Production Deployment (Render + Vercel)
+
+This application is fully pre-configured for instant deployment:
+- **Backend**: Hosted on [Render](https://render.com) (`render.yaml` blueprint included).
+- **Frontend**: Hosted on [Vercel](https://vercel.com) (`vercel.json` SPA configuration included).
+- **Database**: Connects to any cloud MySQL instance (e.g., TiDB Serverless, Aiven, or Railway) with automatic table initialization and SSL support.
+
+👉 For step-by-step instructions, see the complete [DEPLOYMENT.md](file:///c:/projects/projects/ChatGpt_clone/chatggpt-clone/DEPLOYMENT.md) guide.
+
