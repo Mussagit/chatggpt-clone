@@ -7,15 +7,20 @@ let poolConfig;
 if (dbUrl) {
 	try {
 		const parsed = new URL(dbUrl);
-		const isRemote = parsed.hostname !== "localhost" && parsed.hostname !== "127.0.0.1";
+		let host = (process.env.DB_HOST || parsed.hostname).trim();
+		if (host.includes("chatgpt-clone.d.aivencloud.com")) {
+			host = host.replace("chatgpt-clone.d.aivencloud.com", "chatggpt-clone.d.aivencloud.com");
+		}
+
+		const isRemote = host !== "localhost" && host !== "127.0.0.1";
 		const sslRequired = process.env.DB_SSL === "false" ? false : isRemote;
 
 		poolConfig = {
-			host: parsed.hostname,
-			port: Number(parsed.port) || 3306,
-			user: decodeURIComponent(parsed.username || "root"),
-			password: decodeURIComponent(parsed.password || ""),
-			database: parsed.pathname ? parsed.pathname.replace(/^\//, "") : "defaultdb",
+			host,
+			port: Number(process.env.DB_PORT || parsed.port) || 3306,
+			user: decodeURIComponent(process.env.DB_USER || parsed.username || "root"),
+			password: decodeURIComponent(process.env.DB_PASSWORD || parsed.password || ""),
+			database: process.env.DB_NAME || (parsed.pathname ? parsed.pathname.replace(/^\//, "") : "defaultdb"),
 			waitForConnections: true,
 			connectionLimit: 10,
 			queueLimit: 0,
@@ -25,9 +30,12 @@ if (dbUrl) {
 			...(sslRequired ? { ssl: { rejectUnauthorized: false } } : {}),
 		};
 	} catch {
-		// Fallback to direct URI if URL parsing fails
+		let cleanUri = dbUrl;
+		if (cleanUri.includes("chatgpt-clone.d.aivencloud.com")) {
+			cleanUri = cleanUri.replace("chatgpt-clone.d.aivencloud.com", "chatggpt-clone.d.aivencloud.com");
+		}
 		poolConfig = {
-			uri: dbUrl,
+			uri: cleanUri,
 			waitForConnections: true,
 			connectionLimit: 10,
 			queueLimit: 0,
@@ -38,21 +46,22 @@ if (dbUrl) {
 		};
 	}
 } else {
-	const isRemote =
-		process.env.DB_HOST &&
-		process.env.DB_HOST !== "localhost" &&
-		process.env.DB_HOST !== "127.0.0.1";
+	let host = (process.env.DB_HOST || "127.0.0.1").trim();
+	if (host.includes("chatgpt-clone.d.aivencloud.com")) {
+		host = host.replace("chatgpt-clone.d.aivencloud.com", "chatggpt-clone.d.aivencloud.com");
+	}
+	const isRemote = host !== "localhost" && host !== "127.0.0.1";
 	const sslRequired =
 		process.env.DB_SSL === "true" ||
 		process.env.DB_SSL === "1" ||
 		(process.env.NODE_ENV === "production" && isRemote);
 
 	poolConfig = {
-		host: process.env.DB_HOST || "127.0.0.1",
+		host,
 		port: Number(process.env.DB_PORT) || 3306,
 		user: process.env.DB_USER || "root",
 		password: process.env.DB_PASSWORD || "",
-		database: process.env.DB_NAME || "gpt_clone",
+		database: process.env.DB_NAME || "defaultdb",
 		waitForConnections: true,
 		connectionLimit: 10,
 		queueLimit: 0,
