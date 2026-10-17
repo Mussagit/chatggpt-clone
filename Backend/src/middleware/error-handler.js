@@ -7,9 +7,9 @@ export const errorHandler = (err, req, res, next) => {
 	} else {
 		console.warn(`[${new Date().toISOString()}] ⚠️  ${req.method} ${req.originalUrl} — ${err.message}`);
 	}
-
 	return res.status(status).json({
 		success: false,
 		message: err.message || "Something went wrong. Please try again later.",
 	});
+	
 };
