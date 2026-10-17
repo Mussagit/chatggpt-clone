@@ -1,0 +1,424 @@
+.container {
+  padding: 12px 24px 18px;
+  max-width: 780px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 20;
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+/* Tools Popover matching Screenshot 2 */
+.toolsPopover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 24px;
+  width: 440px;
+  max-width: calc(100vw - 48px);
+  background-color: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 60;
+  animation: popoverSlideUp 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popoverSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toolsList {
+  display: flex;
+  flex-direction: column;
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 6px;
+  gap: 2px;
+}
+
+.toolItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.toolItem:hover {
+  background-color: #2a2a2a;
+}
+
+.toolIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.toolIconUpload { color: #d1d5db; }
+.toolIconImage { color: #38bdf8; }
+.toolIconPdf { color: #ef4444; }
+.toolIconLibrary { color: #e5e7eb; }
+.toolIconSketch { color: #fb923c; }
+.toolIconWeb { color: #38bdf8; }
+.toolIconResearch { color: #3b82f6; }
+.toolIconViz { color: #a855f7; }
+.toolIconPlatform { color: #10a37f; }
+.toolIconGithub { color: #f3f4f6; }
+
+.toolText {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.toolTitle {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.toolSubtitle {
+  font-size: 12px;
+  color: #8e8e8e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.connectBadge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ececec;
+  font-weight: 500;
+  margin-left: auto;
+}
+
+/* Tools Search Box at Bottom */
+.toolsSearchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: #171717;
+}
+
+.toolsSearchIcon {
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.toolsSearchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #ececec;
+  font-size: 12.5px;
+  outline: none;
+  font-family: inherit;
+}
+
+.toolsSearchInput::placeholder {
+  color: #6b7280;
+}
+
+/* Form Container */
+.form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #212121;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 26px;
+  padding: 8px 10px 8px 14px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.form:focus-within {
+  border-color: rgba(255, 255, 255, 0.25);
+  background-color: #262626;
+}
+
+/* Chips Container */
+.chipsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 6px 6px;
+}
+
+.activeToolChip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #93c5fd;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 9999px;
+}
+
+.imagePreviewChip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #333333;
+  color: #ececec;
+  font-size: 12px;
+  padding: 3px 8px 3px 4px;
+  border-radius: 9999px;
+  max-width: 220px;
+}
+
+.chipThumbnail {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.pdfChipBadge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background-color: #ef4444;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.fileChip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #333333;
+  color: #ececec;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  max-width: 200px;
+}
+
+.fileName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.removeChipBtn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 1px;
+  border-radius: 50%;
+}
+
+.removeChipBtn:hover {
+  color: #ffffff;
+}
+
+/* Input Row */
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.leftPlusBtn {
+  background: transparent;
+  border: none;
+  color: #b4b4b4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.leftPlusBtn:hover,
+.plusActive {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #ececec;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 6px 0;
+  outline: none;
+  font-family: inherit;
+  resize: none;
+  max-height: 180px;
+  min-height: 24px;
+}
+
+.textarea::placeholder {
+  color: #8e8e8e;
+}
+
+.rightActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Think Button */
+.thinkBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #b4b4b4;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.thinkBtn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.thinkActive {
+  background-color: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.35);
+  color: #60a5fa;
+}
+
+.thinkActive .brainIcon {
+  color: #60a5fa;
+}
+
+.brainIcon {
+  color: #9ca3af;
+}
+
+.iconActionBtn {
+  background: transparent;
+  border: none;
+  color: #b4b4b4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.iconActionBtn:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Blue Voice Button */
+.blueVoiceBtn {
+  background-color: #2563eb;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.blueVoiceBtn:hover {
+  background-color: #1d4ed8;
+  transform: scale(1.05);
+}
+
+/* Submit Arrow button */
+.submitArrowBtn {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.submitArrowBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.submitArrowBtn:not(:disabled):hover {
+  transform: scale(1.06);
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 8px 12px 12px;
+  }
+  .toolsPopover {
+    left: 12px;
+    width: calc(100vw - 24px);
+  }
+}
