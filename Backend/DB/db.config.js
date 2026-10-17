@@ -19,6 +19,9 @@ if (dbUrl) {
 			waitForConnections: true,
 			connectionLimit: 10,
 			queueLimit: 0,
+			enableKeepAlive: true,
+			keepAliveInitialDelay: 10000,
+			connectTimeout: 20000,
 			...(sslRequired ? { ssl: { rejectUnauthorized: false } } : {}),
 		};
 	} catch {
@@ -28,6 +31,9 @@ if (dbUrl) {
 			waitForConnections: true,
 			connectionLimit: 10,
 			queueLimit: 0,
+			enableKeepAlive: true,
+			keepAliveInitialDelay: 10000,
+			connectTimeout: 20000,
 			ssl: { rejectUnauthorized: false },
 		};
 	}
@@ -50,11 +56,26 @@ if (dbUrl) {
 		waitForConnections: true,
 		connectionLimit: 10,
 		queueLimit: 0,
+		enableKeepAlive: true,
+		keepAliveInitialDelay: 10000,
+		connectTimeout: 20000,
 		...(sslRequired ? { ssl: { rejectUnauthorized: false } } : {}),
 	};
 }
 
 const db = mysql.createPool(poolConfig);
+
+/**
+ * Checks database connectivity dynamically for health probes
+ */
+export async function checkDbHealth() {
+	try {
+		await db.execute("SELECT 1");
+		return { status: "connected", ok: true };
+	} catch (error) {
+		return { status: "disconnected", error: error.message, ok: false };
+	}
+}
 
 /**
  * Automatically creates tables if they don't exist yet on startup.
