@@ -1,37 +1,56 @@
 import mysql from "mysql2/promise";
 
-// Detect if SSL should be enabled (required for most cloud MySQL providers like TiDB, Aiven, Railway)
-const isSslEnabled =
-	process.env.DB_SSL === "true" ||
-	process.env.DB_SSL === "1" ||
-	(process.env.NODE_ENV === "production" &&
-		process.env.DB_HOST &&
-		process.env.DB_HOST !== "localhost" &&
-		process.env.DB_HOST !== "127.0.0.1");
-
-const sslOption = isSslEnabled ? { rejectUnauthorized: false } : undefined;
+const dbUrl = process.env.DATABASE_URL || process.env.MYSQL_URL;
 
 let poolConfig;
 
-if (process.env.DATABASE_URL || process.env.MYSQL_URL) {
-	poolConfig = {
-		uri: process.env.DATABASE_URL || process.env.MYSQL_URL,
-		waitForConnections: true,
-		connectionLimit: 10,
-		queueLimit: 0,
-		...(sslOption ? { ssl: sslOption } : {}),
-	};
+if (dbUrl) {
+	try {
+		const parsed = new URL(dbUrl);
+		const isRemote = parsed.hostname !== "localhost" && parsed.hostname !== "127.0.0.1";
+		const sslRequired = process.env.DB_SSL === "false" ? false : isRemote;
+
+		poolConfig = {
+			host: parsed.hostname,
+			port: Number(parsed.port) || 3306,
+			user: decodeURIComponent(parsed.username || "root"),
+			password: decodeURIComponent(parsed.password || ""),
+			database: parsed.pathname ? parsed.pathname.replace(/^\//, "") : "defaultdb",
+			waitForConnections: true,
+			connectionLimit: 10,
+			queueLimit: 0,
+			...(sslRequired ? { ssl: { rejectUnauthorized: false } } : {}),
+		};
+	} catch {
+		// Fallback to direct URI if URL parsing fails
+		poolConfig = {
+			uri: dbUrl,
+			waitForConnections: true,
+			connectionLimit: 10,
+			queueLimit: 0,
+			ssl: { rejectUnauthorized: false },
+		};
+	}
 } else {
+	const isRemote =
+		process.env.DB_HOST &&
+		process.env.DB_HOST !== "localhost" &&
+		process.env.DB_HOST !== "127.0.0.1";
+	const sslRequired =
+		process.env.DB_SSL === "true" ||
+		process.env.DB_SSL === "1" ||
+		(process.env.NODE_ENV === "production" && isRemote);
+
 	poolConfig = {
 		host: process.env.DB_HOST || "127.0.0.1",
 		port: Number(process.env.DB_PORT) || 3306,
-		user: process.env.DB_USER,
-		password: process.env.DB_PASSWORD,
-		database: process.env.DB_NAME,
+		user: process.env.DB_USER || "root",
+		password: process.env.DB_PASSWORD || "",
+		database: process.env.DB_NAME || "gpt_clone",
 		waitForConnections: true,
 		connectionLimit: 10,
 		queueLimit: 0,
-		...(sslOption ? { ssl: sslOption } : {}),
+		...(sslRequired ? { ssl: { rejectUnauthorized: false } } : {}),
 	};
 }
 
